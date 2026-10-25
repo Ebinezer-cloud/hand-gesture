@@ -1,0 +1,6 @@
+mediapipe>=0.10.30,<1.0
+opencv-python>=4.8
+numpy>=1.24
+pillow>=10.0
+# optional - Jarvis speaks when a gesture is recognised (run: pip install pyttsx3):
+# pyttsx3>=2.90
