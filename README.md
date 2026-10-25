@@ -1,125 +1,313 @@
-# J.A.R.V.I.S. Gesture Interface
+# ⚡ J.A.R.V.I.S. Gesture Interface
 
-Webcam hand tracking (all 5 fingers) with an Iron-Man style HUD. Each gesture summons a
-floating hologram that follows your hand.
+### AI-Powered Hand Tracking & Holographic Visualization
 
-| Gesture | Hologram |
+J.A.R.V.I.S. Gesture Interface is a real-time computer vision project that uses a webcam to recognize hand gestures and display animated holographic objects. Inspired by the futuristic J.A.R.V.I.S. interface from Iron Man, the application combines hand tracking, gesture classification, animated visual effects, and a sci-fi heads-up display (HUD).
+
+Control the holographic interface using simple hand movements — no keyboard interaction is required for the main gestures.
+
+---
+
+## 🚀 Features
+
+- **Real-Time Hand Tracking:** Detects and tracks hand landmarks using MediaPipe.
+- **Five-Finger Analysis:** Estimates which fingers are extended and displays the finger count.
+- **Four Gesture Controls:** Recognizes an open palm, closed fist, pinch, and one-finger gesture.
+- **Holographic Visual Effects:** Cyan wireframes, glowing outlines, scanlines, mesh grids, flicker, and materialization animations.
+- **Animated Objects:** Displays a beating heart, moving car, glitching Shadow Mantis, and animated butterfly.
+- **J.A.R.V.I.S.-Style HUD:** Futuristic interface with neon hand skeletons, tracking reticles, an arc reactor, and telemetry panels.
+- **Two-Hand Tracking:** Supports tracking up to two hands simultaneously.
+- **Optional Voice Feedback:** Uses text-to-speech when the optional voice dependency is installed.
+- **Screenshot Capture:** Save screenshots of the live interface.
+- **Interactive Controls:** Toggle the HUD, switch rendering styles, enable debugging, and preview models.
+- **Performance Options:** Adjustable camera resolution, render width, and hand-tracking count.
+- **Automatic Setup:** The Windows launcher creates a virtual environment and installs the required packages.
+- **Gesture Smoothing:** Reduces flickering between gesture classifications.
+
+## ✋ Gesture Controls
+
+| Hand Gesture | Activated Object |
 |---|---|
-| Open palm (all fingers out) | Human heart (beating) |
-| Closed fist | Car |
-| Pinch (thumb + index touching) | Shadow mantis face (glitching) |
-| One finger (index up) | Butterfly (flapping) |
+| 🖐️ Open Palm | ❤️ Human Heart |
+| ✊ Closed Fist | 🚗 Car |
+| 🤏 Pinch (Thumb + Index) | 👾 Shadow Mantis |
+| ☝️ One Finger (Index Up) | 🦋 Butterfly |
 
-The models are shown as **Jarvis-style holograms**: translucent cyan wireframe with a glowing
-outline and 3D-mesh grid, scanlines and a moving highlight, flicker, a bottom-up "materialise"
-effect, a rotating projector base with rising particles, a scan ring, and live telemetry
-call-outs (heart rate, power, threat level, wingspan ...). Press `M` for the plain coloured
-images, or start with `--plain-models`.
+The application uses hand landmarks and relative distances to classify gestures. A smoothing algorithm helps maintain stable recognition across consecutive frames.
 
-Also: neon hand skeleton, live finger count (0-5), two-hand tracking, event log, spinning
-arc reactor, optional voice ("Cardiac model online."), screenshots.
+## 🛠️ Technology Stack
 
-## Quick start
+- **Python** — Application logic and gesture processing
+- **MediaPipe** — Hand landmark detection
+- **OpenCV** — Webcam capture, image processing, rendering, and visual effects
+- **NumPy** — Numerical operations and image manipulation
+- **Pillow** — Image-processing dependency
+- **pyttsx3 (Optional)** — Text-to-speech feedback
+- **Threading** — Background camera capture for improved responsiveness
 
-Needs Python 3.10 - 3.13 (3.12 recommended) and a webcam. If you don't have Python: install 3.12 from python.org and tick "Add python.exe to PATH".
+## 📋 Requirements
 
-**Windows:** double-click `run.bat` (installs everything, then starts the app; the window stays open if something fails so you can read the message)
-**macOS / Linux:** `./run.sh`
+- Windows 10/11, macOS, or Linux
+- Python 3.10–3.13 (Python 3.12 recommended)
+- A working webcam
+- Internet access for initial package installation and model download
+- Sufficient processing power for real-time video processing
 
-First launch creates a virtual environment, installs the packages, and downloads the
-~8 MB MediaPipe hand model into `models/` (internet needed once). The download shows progress,
-retries, and rejects incomplete files. If it still fails, `run.bat` opens the download link in
-your browser: let it finish, press any key in the window, and the file is picked up from your
-Downloads folder automatically.
+## ⚙️ Installation & Setup
 
-Test the camera and model without starting the app: `run.bat --check` (or `python main.py --check`).
+### Windows — Quick Start
 
-Manual way:
+**Step 1:** Download or clone this repository.
 
 ```bash
+git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY.git
+```
+
+Replace the repository URL with your actual GitHub repository URL.
+
+**Step 2:** Open the project folder.
+
+**Step 3:** Double-click `run.bat`.
+
+The launcher automatically:
+1. Detects a supported Python installation.
+2. Creates a virtual environment.
+3. Installs the required Python packages.
+4. Checks the hologram assets.
+5. Downloads the MediaPipe hand-tracking model if needed.
+6. Starts the application.
+
+**Step 4:** Allow webcam access and show your hand to the camera.
+
+**Step 5:** Perform one of the supported gestures to activate its hologram.
+
+### macOS / Linux
+
+Open a terminal in the project directory and run:
+
+```bash
+chmod +x run.sh
+./run.sh
+```
+
+### Manual Installation
+
+Create and activate a virtual environment, then install the dependencies:
+
+```bash
+python -m venv .venv
+```
+
+Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+macOS / Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+Install the packages and start the application:
+
+```bash
+python -m pip install --upgrade pip
 pip install -r requirements.txt
-python tools/generate_assets.py     # only if assets/ is empty
 python main.py
 ```
 
-If package install fails, install Python 3.12, delete the `.venv` folder and run again.
+The application downloads the hand-tracking model when it is not already available.
 
-## Keys
+## 🎮 Keyboard Shortcuts
 
 | Key | Action |
 |---|---|
-| `Q` / `Esc` | Quit |
-| `H` | Show / hide HUD |
-| `V` | Voice on / off (needs `pip install pyttsx3`) |
-| `S` | Save screenshot to `screenshots/` |
-| `F` | Fullscreen |
-| `M` | Switch models between hologram and plain colour |
-| `D` | Debug: show live finger ratios beside your hand |
-| `1` `2` `3` `4` | Preview heart / car / mantis / butterfly without a hand (press again to hide) |
+| `Q` / `Esc` | Exit the application |
+| `H` | Show or hide the HUD |
+| `V` | Toggle voice feedback |
+| `S` | Save a screenshot |
+| `F` | Toggle fullscreen |
+| `M` | Switch between holographic and plain-color models |
+| `D` | Display gesture debugging information |
+| `1` | Preview the heart |
+| `2` | Preview the car |
+| `3` | Preview the Shadow Mantis |
+| `4` | Preview the butterfly |
 
-Options: `python main.py --camera 1 --width 1920 --height 1080 --hands 1 --no-voice --fullscreen`
+Press the same model preview key again to hide its preview.
 
-## Use your own images
+## 🧠 How It Works
 
-Every model is a transparent PNG in `assets/`. Replace a file (keep the name) and restart:
+The application follows a real-time computer vision pipeline:
 
-- `heart.png`, `car.png`, `mantis.png`, `butterfly.png`
+1. **Webcam Capture:** Reads live frames from the camera.
+2. **Hand Detection:** MediaPipe identifies hand landmarks, including fingertips and joints.
+3. **Gesture Classification:** The gesture module calculates relative distances and finger-extension ratios.
+4. **Gesture Smoothing:** A majority-vote algorithm reduces unstable classifications.
+5. **Object Selection:** The recognized gesture is mapped to its corresponding holographic object.
+6. **Hologram Rendering:** OpenCV processes the object with glowing edges, scanlines, animations, and transparency.
+7. **HUD Composition:** The final frame combines the camera feed, hand skeleton, holograms, interface elements, and telemetry.
 
-A real heart photo, a render of your own car, your own character art: all work.
-Use PNGs with a transparent background, about 500 px on the long side.
+## 📂 Project Structure
 
-## Tuning the gestures
-
-If a gesture triggers too easily or not enough, run `python main.py --debug` and watch
-the numbers beside your hand, then edit the constants at the top of `jarvis/gestures.py`:
-
-| Constant | Meaning |
-|---|---|
-| `FINGER_EXTENDED_RATIO` | Higher = finger must be straighter to count as "out" |
-| `THUMB_OUT_RATIO` | Higher = thumb must stick out further |
-| `PINCH_RATIO` | Higher = thumb and index may be farther apart and still pinch |
-| `PINCH_INDEX_MIN_RATIO` | Stops a closed fist being read as a pinch |
-
-Tips: good light on your hand, plain background, keep the whole hand in frame, hold a
-gesture for ~0.2 s (the smoother ignores flicker).
-
-## Speed
-
-Defaults are already tuned: the camera is read in a background thread, requested in MJPG mode
-(many webcams are stuck at 10-15 fps at 720p without it), and hand detection runs on a small copy
-of the image. If it is still slow:
-
-- `python main.py --render-width 800` (lower = faster) or `--width 640 --height 480`
-- `--hands 1` tracks one hand only
-- `H` hides the HUD, `M` switches to plain images (slightly cheaper)
-- if the picture looks wrong or the camera misbehaves, try `--no-mjpg`
-- close other apps that use the camera or the GPU (Zoom, Teams, browser video calls)
-
-## Troubleshooting
-
-- **Camera won't open:** close Zoom/Teams/browser tabs using it, or try `--camera 1`.
-- **Stuck or failing model download:** `run.bat` retries and then opens your browser. Or download `hand_landmarker.task` from
-  `https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task`
-  and save it as `models/hand_landmarker.task`.
-- **Fist shows as pinch (or reverse):** adjust `PINCH_INDEX_MIN_RATIO` / `PINCH_RATIO`.
-
-## Project layout
-
+```text
+jarvis_gesture/
+│
+├── main.py
+├── run.bat
+├── run.sh
+├── requirements.txt
+├── README.md
+│
+├── assets/
+│   ├── heart.png
+│   ├── car.png
+│   ├── mantis.png
+│   └── butterfly.png
+│
+├── jarvis/
+│   ├── __init__.py
+│   ├── gestures.py
+│   ├── tracker.py
+│   ├── sprites.py
+│   ├── hud.py
+│   ├── voice.py
+│   └── modelfetch.py
+│
+├── models/
+│   ├── .gitkeep
+│   └── hand_landmarker.task
+│
+├── tools/
+│   ├── fetch_model.py
+│   └── generate_assets.py
+│
+└── tests/
+    ├── fake_hand.py
+    ├── test_gestures.py
+    ├── smoke_main.py
+    └── render_preview.py
 ```
-main.py                 app loop (camera -> tracking -> gesture -> hologram -> HUD)
-jarvis/gestures.py      finger + gesture classifier, smoothing
-jarvis/tracker.py       MediaPipe Hand Landmarker wrapper + model download
-jarvis/sprites.py       hologram loading, animation, fade/follow logic
-jarvis/hud.py           HUD drawing (neon glow, reticles, reactor, panels)
-jarvis/voice.py         optional text-to-speech
-tools/generate_assets.py  draws the four PNGs in assets/
-tests/                  gesture tests + offscreen render preview (no camera needed)
+
+The `models/hand_landmarker.task` file is downloaded automatically when needed and does not have to be committed to GitHub.
+
+## 🧪 Testing
+
+Run the gesture-classification tests:
+
+```bash
+python tests/test_gestures.py
 ```
 
-Run the tests: `python tests/test_gestures.py`, `python tests/smoke_main.py` (full loop, fake camera) and `python tests/render_preview.py`.
+Run the application smoke test:
 
-## Adding a new gesture
+```bash
+python tests/smoke_main.py
+```
 
-1. Add a constant and a rule in `classify()` (`jarvis/gestures.py`).
-2. Map it in `SPRITE_FOR` / `TITLE` / `SPEECH` (`jarvis/sprites.py`) and add `assets/<name>.png`.
-3. Add its animation in `Sprite.render()` and an entry in the legend (`jarvis/hud.py`).
+Generate the rendering preview:
+
+```bash
+python tests/render_preview.py
+```
+
+These scripts are provided for checking gesture classification and application rendering. Run them in an environment with the required dependencies installed.
+
+## 🎨 Customize the Holograms
+
+You can replace the images in the `assets/` folder with your own transparent PNG images.
+
+Keep the existing filenames:
+
+- `heart.png`
+- `car.png`
+- `mantis.png`
+- `butterfly.png`
+
+The application loads these assets and applies its holographic rendering and animation effects.
+
+## ⚡ Performance Optimization
+
+If the application runs slowly, try reducing the rendering resolution:
+
+```bash
+python main.py --render-width 800
+```
+
+Use a lower camera resolution:
+
+```bash
+python main.py --width 640 --height 480
+```
+
+Track only one hand:
+
+```bash
+python main.py --hands 1
+```
+
+Other options include disabling the HUD, switching to plain-color images, or disabling the camera's MJPG setting if the webcam behaves incorrectly.
+
+## 🔧 Troubleshooting
+
+**Camera not opening**
+- Close other applications using the webcam.
+- Try another camera index with `--camera 1`.
+
+**Hand-tracking model download fails**
+- Check your internet connection.
+- Run the launcher again or download the official MediaPipe hand-landmarker model and place it at the configured model path.
+
+**Gesture recognition is unstable**
+- Improve lighting.
+- Keep the hand fully visible.
+- Use a plain background.
+- Adjust the thresholds in `jarvis/gestures.py`.
+
+**Voice feedback is unavailable**
+
+Install the optional dependency:
+
+```bash
+pip install pyttsx3
+```
+
+**Package installation errors**
+- Verify that your Python version is supported.
+- Recreate the virtual environment if necessary.
+- Check that the required packages installed successfully.
+
+## 🔒 Privacy
+
+The application processes webcam frames locally for hand tracking and visual rendering. It does not require a cloud-based gesture recognition service. The initial dependency and model downloads require internet access.
+
+## ⚠️ Disclaimer
+
+The heart-rate, SpO₂, engine-power, and other telemetry displayed in the interface are simulated visual elements for demonstration purposes. They are not actual sensor readings, medical measurements, or verified vehicle diagnostics.
+
+## 🌟 Future Improvements
+
+Potential extensions include:
+
+- Additional custom hand gestures
+- More interactive holographic objects
+- Customizable gesture-to-object mappings
+- Improved gesture recognition for different hand orientations
+- Additional voice commands and interface controls
+- More advanced 3D visualization and interaction
+
+## 👨‍💻 Author
+
+**Ebinezer Jeba Samuel**
+
+Aspiring Software Engineer | AI & ML Enthusiast | Computer Vision Developer
+
+GitHub: [@Ebinezer-cloud](https://github.com/Ebinezer-cloud)
+
+---
+
+⭐ If you find this project interesting, consider giving the repository a star!
+
+**Built with Python, Computer Vision, and a J.A.R.V.I.S.-inspired vision.**
